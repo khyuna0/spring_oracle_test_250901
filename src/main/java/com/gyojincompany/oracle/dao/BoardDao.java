@@ -9,8 +9,11 @@ public interface BoardDao {
 	// 게시판 글쓰기
 	public void boardWriteDao(String btitle,String bcontent,String bwriter);
 	
-	// 게시판 글 목록 보기 
-	public List<BoardDto> boardListDao();
+	// 게시판 전체 글 목록 보기 (페이징 안됨!)
+	//public List<BoardDto> boardListDao();
+	
+	// 페이징 된 게시판 전체 글 목록 보기
+	public List<BoardDto> boardListDao(int startRow, int endRow);
 	
 	// 게시판 전체 글 개수
 	public int AllBoardCountDao();

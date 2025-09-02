@@ -11,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BoardDto {
 	
+	private int rnum; // rowNum
 	private int bnum; // 기본키
 	private String btitle;
 	private String bcontent;

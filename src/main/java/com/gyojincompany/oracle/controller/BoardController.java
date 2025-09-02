@@ -46,16 +46,16 @@ public class BoardController {
 		return "redirect:blist";
 	}
 	
-	@RequestMapping(value = "/blist")
-	public String blist(Model model) {
-		BoardDao boardDao = session.getMapper(BoardDao.class);
-		List<BoardDto> boardDtos = boardDao.boardListDao(); // 모든 글 가져오기
-		
-		model.addAttribute("count", boardDao.AllBoardCountDao());
-		model.addAttribute("boardDtos", boardDtos);
-		
-		return "boardlist";
-	}
+//	@RequestMapping(value = "/blist")
+//	public String blist(Model model) {
+//		BoardDao boardDao = session.getMapper(BoardDao.class);
+//		List<BoardDto> boardDtos = boardDao.boardListDao(); // 모든 글 가져오기
+//		
+//		model.addAttribute("count", boardDao.AllBoardCountDao());
+//		model.addAttribute("boardDtos", boardDtos);
+//		
+//		return "boardlist";
+//	}
 	
 	@RequestMapping(value = "/boardDelete")
 	public String boardDelete(HttpServletRequest request, Model model, HttpSession session) {
@@ -94,5 +94,30 @@ public class BoardController {
 		
 		return "redirect:boardView?bnum="+ bnum ;
 	}
+	
+	@RequestMapping(value = "/pagelist")
+	public String pagelist(HttpServletRequest request, Model model, HttpSession session) {
+		
+		int pageSize = 10; // 한 페이지 당 출력될 글 수
+		int pageNum = 1; // 유저가 선택한 페이지의 번호(기본값은 1) , 현재 페이지 번호
+		int blockSize = 5; // ㅠㅔ이지 블럭에 표시될 페이지의 수 (1 2 3 4 5 / 6 7 8 9 10 ...)
+		
+		if(request.getParameter("pageNum") != null ) {
+			pageNum = Integer.parseInt(request.getParameter("pageNum")); // 유저가 선택한 페이지의 번호
+		} 
+		
+		int startRow = (pageNum * pageSize) - 9; // 페이징 시작시 행의 번호 ( 1-1 / 2-11 / 3-21 ...)
+		// (pageNum - 1) * pageSize + 1
+		int endRow = pageNum * pageSize;
+		
+		BoardDao boardDao = this.session.getMapper(BoardDao.class);
+		List<BoardDto> boardDtos = boardDao.boardListDao(startRow , endRow); // 모든 글 가져오기
+		
+		model.addAttribute("count", boardDao.AllBoardCountDao());
+		model.addAttribute("boardDtos", boardDtos);
+		
+		return "pagelist";
+	}
+	
 	
 }
