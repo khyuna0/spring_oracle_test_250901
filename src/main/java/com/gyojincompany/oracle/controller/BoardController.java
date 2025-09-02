@@ -61,9 +61,15 @@ public class BoardController {
 	public String boardDelete(HttpServletRequest request, Model model, HttpSession session) {
 		
 		BoardDao boardDao = this.session.getMapper(BoardDao.class);
-		boardDao.boardDeleteDao(Integer.parseInt(request.getParameter("bnum")));
-		
-		return "redirect:blist";
+		int result = boardDao.boardDeleteDao(Integer.parseInt(request.getParameter("bnum")));
+		if(result == 1) { // 글 삭제 성공
+			return "redirect:blist";
+		} else {
+			model.addAttribute("msg", "글 삭제에 실패했습니다.");
+			model.addAttribute("url", "blist");
+			return "alert/alert";
+		}
+
 	}
 	
 	@RequestMapping(value = "/boardView")
@@ -75,6 +81,18 @@ public class BoardController {
 		model.addAttribute("boardDto", boardDao.boardViewDao(bnum));
 		
 		return "boardView";
+	}
+	
+	@RequestMapping(value = "/boardModify")
+	public String boardModify(HttpServletRequest request, Model model, HttpSession session) {
+		int bnum = Integer.parseInt(request.getParameter("bnum"));
+		String btitle = request.getParameter("btitle");
+		String bcontent = request.getParameter("bcontent");
+		
+		BoardDao boardDao = this.session.getMapper(BoardDao.class);
+		boardDao.boardModifyDao(bnum, btitle, bcontent);
+		
+		return "redirect:boardView?bnum="+ bnum ;
 	}
 	
 }

@@ -16,11 +16,14 @@ public interface BoardDao {
 	public int AllBoardCountDao();
 	
 	// 게시판 글 삭제
-	public void boardDeleteDao(int bnum);
+	public int boardDeleteDao(int bnum);
 	
 	// 게시판에서 선택한 글 보기
 	public BoardDto boardViewDao(int bnum);
 	
 	// 글 조회수
 	public void boardHitDao(int bnum);
+	
+	// 글 수정
+	public void boardModifyDao(int bnum,String btitle,String bcontent);
 }

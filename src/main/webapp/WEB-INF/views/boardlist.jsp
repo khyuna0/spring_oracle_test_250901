@@ -35,6 +35,7 @@
 	</c:forEach>
 	</table>
 	<hr>
+	총 게시글 수 : ${count } 건<br><br>
 	<input type="button" value="글쓰기" onclick="javascript:window.location.href='bwrite'">
 			
 	
