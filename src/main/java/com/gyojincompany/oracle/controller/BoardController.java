@@ -95,8 +95,11 @@ public class BoardController {
 		return "redirect:boardView?bnum="+ bnum ;
 	}
 	
+	// 페이징, 페이지 블럭 처리
 	@RequestMapping(value = "/pagelist")
 	public String pagelist(HttpServletRequest request, Model model, HttpSession session) {
+		
+		BoardDao boardDao = this.session.getMapper(BoardDao.class);
 		
 		int pageSize = 10; // 한 페이지 당 출력될 글 수
 		int pageNum = 1; // 유저가 선택한 페이지의 번호(기본값은 1) , 현재 페이지 번호
@@ -110,10 +113,25 @@ public class BoardController {
 		// (pageNum - 1) * pageSize + 1
 		int endRow = pageNum * pageSize;
 		
-		BoardDao boardDao = this.session.getMapper(BoardDao.class);
 		List<BoardDto> boardDtos = boardDao.boardListDao(startRow , endRow); // 모든 글 가져오기
+		int totalCount = boardDao.AllBoardCountDao();
 		
-		model.addAttribute("count", boardDao.AllBoardCountDao());
+		int startPage = ((pageNum-1)/blockSize) * blockSize + 1 ;
+		// 1 2 3 4 5 -> 1 / 6 7 8 9 10 -> 2 ...	
+		
+		int endPage = startPage + blockSize -1 ;
+		
+		int totalPage = (int) Math.ceil((double) totalCount /pageSize); // 전체 글 수로 만든 페이지 수
+		
+		if (totalPage < endPage) {
+			endPage = totalPage;
+		}
+		
+		model.addAttribute("totalPage", totalPage);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		model.addAttribute("pageNum", pageNum); // 유저가 클릭한 현재 페이지 번호
+		model.addAttribute("count", totalCount);
 		model.addAttribute("boardDtos", boardDtos);
 		
 		return "pagelist";
