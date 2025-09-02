@@ -124,6 +124,8 @@ public class BoardController {
 		int totalPage = (int) Math.ceil((double) totalCount /pageSize); // 전체 글 수로 만든 페이지 수
 		
 		if (totalPage < endPage) {
+			// 실제 모든 글 갯수로 만든 총 페이지 수(totlaPage)가 endPage 보다 작을 경우,
+			// 없는 페이지까지 페이지 블럭에 출력되므로 totalPage가 endPage 보다 작을 경우
 			endPage = totalPage;
 		}
 		
