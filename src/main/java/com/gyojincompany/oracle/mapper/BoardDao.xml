@@ -50,15 +50,13 @@
 		INNER JOIN membertbl m ON b.bwriter = m.memberid
 		WHERE bnum = #{param1}
 	</select> 
-	
-	
-	
+
 	<!--  모든 글 개수  -->
 	<select id="AllBoardCountDao" resultType="int">
 		SELECT COUNT(*) from boardtbl
 	</select>
 	
-	<!-- 글삭제 -->
+	<!-- 글 삭제 -->
 	<delete id="boardDeleteDao">
 		DELETE FROM boardtbl WHERE bnum = #{param1}
 	</delete>
